@@ -2,9 +2,8 @@ import hashlib
 
 from aiogram import Router, F, html
 from aiogram.filters import CommandStart, IS_MEMBER, IS_NOT_MEMBER
-from aiogram.types import Message, InlineQuery
+from aiogram.types import Message, InlineQuery, InlineQueryResultVoice
 from aiogram.types.input_file import FSInputFile
-from aiogram.types.inline_query_result_cached_voice import InlineQueryResultCachedVoice
 from aiogram.types.inline_query_result_cached_sticker import InlineQueryResultCachedSticker
 from aiogram.filters.chat_member_updated import ChatMemberUpdatedFilter, ChatMemberUpdated
 
@@ -59,11 +58,11 @@ async def inline_query_voice_handler(inline_query: InlineQuery) -> None:
     voice_container = VoiceContainer()
     voices = voice_container.get_voices()
     for voice_data in voices:
-        title, voice_id = voice_data
+        title, voice_url = voice_data
         result_id = hashlib.md5(title.encode()).hexdigest()
-        item = InlineQueryResultCachedVoice(
+        item = InlineQueryResultVoice(
             id = result_id,
-            voice_file_id = voice_id,
+            voice_url = voice_url,
             title = title
         )
         items.append(item)
